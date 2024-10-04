@@ -1,6 +1,6 @@
   export const canvasCart = {
     position: "absolute",
-    top: 12,
+    top: 120,
     left: 525,
     lineHeight: "32px",
     borderRadius: 6,

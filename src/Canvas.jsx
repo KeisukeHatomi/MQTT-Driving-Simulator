@@ -50,7 +50,7 @@ function Canvas({ command, client }) {
     if (x < 40) directionX.current = 1;
     if (y < 40) directionY.current = 1;
 
-    ctxCart.ctx.clearRect(0, 0, 600, 600);
+    ctxCart.ctx.clearRect(0, 0, ctxCart.canvas.width, ctxCart.canvas.height);
     ctxCart.ctx.save();
     ctxCart.ctx.scale(PRESET_THOUZER.scale, PRESET_THOUZER.scale);
     ctxCart.ctx.translate(-PRESET_THOUZER.offset, -PRESET_THOUZER.offset);
