@@ -323,7 +323,7 @@ function Canvas({ command, client }) {
           onValueChange={(tab) => setTab(tab)}
           items={[
             {
-              label: "First",
+              label: "Simulate",
               value: "1",
               content: (
                 <Flex width={500} direction="column" alignItems={"center"}>
@@ -343,13 +343,49 @@ function Canvas({ command, client }) {
               ),
             },
             {
-              label: "Second",
+              label: "Vehicle",
               value: "2",
               content: (
                 <>
                   <p>Content of the second tab.</p>
                   <Button isFullWidth onClick={() => setTab("1")}>
-                    Go to first tab
+                    Back to Simulate tab
+                  </Button>
+                </>
+              ),
+            },
+            {
+              label: "Cart",
+              value: "3",
+              content: (
+                <>
+                  <p>Content of the second tab.</p>
+                  <Button isFullWidth onClick={() => setTab("1")}>
+                    Back to Simulate tab
+                  </Button>
+                </>
+              ),
+            },
+            {
+              label: "Course",
+              value: "4",
+              content: (
+                <>
+                  <p>Content of the second tab.</p>
+                  <Button isFullWidth onClick={() => setTab("1")}>
+                    Back to Simulate tab
+                  </Button>
+                </>
+              ),
+            },
+            {
+              label: "Data",
+              value: "5",
+              content: (
+                <>
+                  <p>Content of the second tab.</p>
+                  <Button isFullWidth onClick={() => setTab("1")}>
+                    Back to Simulate tab
                   </Button>
                 </>
               ),
