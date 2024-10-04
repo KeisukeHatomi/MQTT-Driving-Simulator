@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mqttdrivingsimulator-dev-348d8-authRole",
+      "UnauthRoleArn": "arn:aws:iam::478054654864:role/amplify-mqttdrivingsimulator-dev-348d8-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::478054654864:role/amplify-mqttdrivingsimulator-dev-348d8-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-mqttdrivingsimulator-dev-348d8-deployment",
+      "UnauthRoleName": "amplify-mqttdrivingsimulator-dev-348d8-unauthRole",
+      "StackName": "amplify-mqttdrivingsimulator-dev-348d8",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:478054654864:stack/amplify-mqttdrivingsimulator-dev-348d8/19a8d7f0-81ee-11ef-aaac-0a0db855f50f",
+      "AmplifyAppId": "d3fq6tjkzli3k2"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3fq6tjkzli3k2",
+          "type": "cicd"
+        }
+      }
+    }
+  }
+}

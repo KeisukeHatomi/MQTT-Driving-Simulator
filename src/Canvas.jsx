@@ -9,6 +9,25 @@ import {
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
+const PRESET_CUBE = {
+  type: "CUBE",
+  image: "./image/THOUZER2.png",
+  scale: 0.1, // 元画像サイズに合わせた比率
+  offset: 500, // 元画像に合わせた位置調整
+  size: {
+    width: 1011,
+    length: 901,
+    tread: 244,
+    towpos: -40,
+    rearend: -210,
+    linkpos: -40,
+    camerapos: 0,
+  },
+};
+
+const ImageVehicle = new Image();
+ImageVehicle.src = PRESET_CUBE.image;
+
 function Canvas({ command, client }) {
   const intervalId = useRef("");
   const exec = useRef(false);
@@ -44,17 +63,28 @@ function Canvas({ command, client }) {
     propGrid.ctx.clearRect(0, 0, 600, 600);
     propGrid.ctx.strokeStyle = lineStyle.color;
     propGrid.ctx.lineWidth = lineStyle.width;
-    propGrid.ctx.beginPath();
-    propGrid.ctx.arc(x, y, 15, 0, 2 * Math.PI);
-    propGrid.ctx.stroke();
-    propGrid.ctx.closePath();
+    // propGrid.ctx.beginPath();
+    // propGrid.ctx.arc(x, y, 15, 0, 2 * Math.PI);
+    // propGrid.ctx.stroke();
+    // propGrid.ctx.closePath();
+    propGrid.ctx.save();
+    propGrid.ctx.scale(PRESET_CUBE.scale, PRESET_CUBE.scale);
+    propGrid.ctx.translate(-PRESET_CUBE.offset, -PRESET_CUBE.offset);
+    propGrid.ctx.drawImage(
+      ImageVehicle,
+      x / PRESET_CUBE.scale,
+      y / PRESET_CUBE.scale,
+      ImageVehicle.width,
+      ImageVehicle.height
+    );
+    propGrid.ctx.restore();
   };
 
   const simulate = () => {
-    if (x > propGrid.canvas.width - 15) directionX.current = -1;
-    if (y > propGrid.canvas.height - 15) directionY.current = -1;
-    if (x < 15) directionX.current = 1;
-    if (y < 15) directionY.current = 1;
+    if (x > propGrid.canvas.width - 40) directionX.current = -1;
+    if (y > propGrid.canvas.height - 40) directionY.current = -1;
+    if (x < 40) directionX.current = 1;
+    if (y < 40) directionY.current = 1;
 
     draw(x, y);
     x += stepX.current * speed.current * directionX.current;
