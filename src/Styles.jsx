@@ -1,9 +1,7 @@
   export const canvasCart = {
     position: "absolute",
-    top: 50,
+    top: 300,
     left: 50,
-    width: 1200,
-    height: 800,
     lineHeight: "32px",
     borderRadius: 6,
     // border: "1px solid #000000",
@@ -14,10 +12,8 @@
 
   export const canvasCourse = {
     position: "absolute",
-    top: 50,
+    top: 300,
     left: 50,
-    width: 1200,
-    height: 800,
     lineHeight: "32px",
     borderRadius: 6,
     // border: "1px solid #000000",
@@ -28,10 +24,8 @@
 
   export const canvasGrid = {
     position: "absolute",
-    top: 50,
+    top: 300,
     left: 50,
-    width: 1200,
-    height: 800,
     lineHeight: "32px",
     borderRadius: 6,
     // border: "1px solid #000000",

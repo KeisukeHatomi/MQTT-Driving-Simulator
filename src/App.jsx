@@ -6,7 +6,7 @@ import mqtt from "mqtt";
 function App() {
   const [client, setClient] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [subMessages, setSubMessages] = useState([]);
+  const [subMessages, setSubMessages] = useState(JSON.parse('{"x":1,"y":1}'));
   const [pubMessage, setPubMessage] = useState("");
   const str = [];
 
@@ -23,17 +23,23 @@ function App() {
     mqttClient.on("connect", () => {
       setIsConnected(true);
       console.log("Connected to MQTT broker");
-      mqttClient.subscribe("emqx/esp32"); 
+      mqttClient.subscribe("emqx/esp32");
     });
 
     mqttClient.on("message", (topic, message) => {
       console.log("Received message:", topic, message.toString());
-
       str.push(message.toString() + "\n");
       if (str.length > 5) {
         str.shift(0);
       }
-      setSubMessages(JSON.parse(message.toString()));
+
+      try {
+        const value = JSON.parse(message.toString());
+        setSubMessages(value);
+      } catch {
+        setSubMessages("");
+        console.log("🔵subscribe message is not type of JSON ");
+      }
     });
 
     setClient(mqttClient);
@@ -52,13 +58,7 @@ function App() {
 
   return (
     <div>
-      MQTT Driving Simulator
-      {/* <canvas style={Styles.canvasGrid}></canvas>
-      <canvas style={Styles.canvasCourse}></canvas>
-      <canvas style={Styles.canvasCart}></canvas> */}
-      <Canvas 
-        command = {subMessages}
-        />
+      <Canvas command={subMessages} client={client} />
     </div>
   );
 }

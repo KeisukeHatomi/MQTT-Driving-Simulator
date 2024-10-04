@@ -1,8 +1,24 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import * as Styles from "./Styles";
+import {
+  Authenticator,
+  Flex,
+  Button,
+  TextAreaField,
+  Divider,
+} from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
 
-function Canvas({command}) {
-  console.log('command🔵 ', command);
+function Canvas({ command, client }) {
+  const intervalId = useRef("");
+  const exec = useRef(false);
+  const [operate, setOperate] = useState(command.command);
+  const directionX = useRef(1);
+  const directionY = useRef(1);
+  const stepX = useRef(0);
+  const stepY = useRef(0);
+  const speed = useRef(1);
+
   const propGrid = {
     canvas: "",
     ctx: "",
@@ -20,15 +36,43 @@ function Canvas({command}) {
     width: 2,
   };
 
+  let x = 300,
+    y = 300;
+
   // 線の描画イベント
-  const draw = () => {
-      propGrid.ctx.beginPath();
-      propGrid.ctx.moveTo(0, 0);
-      propGrid.ctx.lineTo(command.x, command.y);
-      propGrid.ctx.strokeStyle = lineStyle.color;
-      propGrid.ctx.lineWidth = lineStyle.width;
-      propGrid.ctx.stroke();
-      propGrid.ctx.closePath();
+  const draw = (x, y) => {
+    propGrid.ctx.clearRect(0, 0, 600, 600);
+    propGrid.ctx.strokeStyle = lineStyle.color;
+    propGrid.ctx.lineWidth = lineStyle.width;
+    propGrid.ctx.beginPath();
+    propGrid.ctx.arc(x, y, 15, 0, 2 * Math.PI);
+    propGrid.ctx.stroke();
+    propGrid.ctx.closePath();
+  };
+
+  const simulate = () => {
+    if (x > propGrid.canvas.width - 15) directionX.current = -1;
+    if (y > propGrid.canvas.height - 15) directionY.current = -1;
+    if (x < 15) directionX.current = 1;
+    if (y < 15) directionY.current = 1;
+
+    draw(x, y);
+    x += stepX.current * speed.current * directionX.current;
+    y += stepY.current * speed.current * directionY.current;
+  };
+
+  const handleStart = () => {
+    if (!exec.current) {
+      intervalId.current = setInterval(simulate, 1);
+      exec.current = true;
+    }
+  };
+
+  const handleStop = () => {
+    if (exec.current) {
+      clearInterval(intervalId.current);
+      exec.current = false;
+    }
   };
 
   // マウスイベントの座標を取得及びイベント毎による処理を振り分ける
@@ -41,8 +85,7 @@ function Canvas({command}) {
     }
 
     if (event.type == "mousedown") {
-
-        draw();
+      draw(x, y);
     }
 
     if (event.type == "mouseup" || event.type == "mouseout") {
@@ -50,7 +93,7 @@ function Canvas({command}) {
     }
 
     if (event.type == "mousemove" && propGrid.drawFlag) {
-      draw();
+      draw(x, y);
     }
   };
 
@@ -75,23 +118,85 @@ function Canvas({command}) {
     propGrid.canvas.addEventListener("mouseout", (event) =>
       getCoordinate(event)
     );
-    draw()
+    draw();
   });
+
+  useEffect(() => {
+    setOperate(command.command);
+    switch (command.command) {
+      case "up":
+        directionY.current = -1;
+        stepX.current = 0;
+        stepY.current = 1;
+        break;
+      case "left":
+        directionX.current = -1;
+        stepX.current = 1;
+        stepY.current = 0;
+        break;
+      case "right":
+        directionX.current = 1;
+        stepX.current = 1;
+        stepY.current = 0;
+        break;
+      case "down":
+        directionY.current = 1;
+        stepX.current = 0;
+        stepY.current = 1;
+        break;
+      case "stop":
+        stepX.current = 0;
+        stepY.current = 0;
+        break;
+      case "speedUp":
+        speed.current < 10 ? speed.current++ : speed.current;
+        console.log("speed.current🔵 ", speed.current);
+        break;
+      case "speedDown":
+        speed.current > 1 ? speed.current-- : speed.current;
+        console.log("speed.current🔵 ", speed.current);
+        break;
+      default:
+        break;
+    }
+  }, [command]);
 
   return (
     <div>
       <canvas
         id="canvasCourse"
-        width="1200"
-        height="800"
+        width="600"
+        height="600"
         style={Styles.canvasCourse}
       ></canvas>
       <canvas
         id="canvasGrid"
-        width="1200"
-        height="800"
+        width="600"
+        height="600"
         style={Styles.canvasGrid}
       ></canvas>
+      <Flex width={700} direction="column" alignItems={"center"}>
+        <h3>MQTT Driving Simulator</h3>
+        <Flex direction="row" alignItems={"center"}>
+          <Button width={100} onClick={handleStart}>
+            Start
+          </Button>
+          <Button width={100} onClick={handleStop}>
+            Stop
+          </Button>
+        </Flex>
+        <label>
+          Command
+          <TextAreaField
+            marginTop={0}
+            name="postContent"
+            rows={1}
+            cols={40}
+            value={operate}
+          />
+        </label>
+      </Flex>
+      <Flex></Flex>
     </div>
   );
 }
