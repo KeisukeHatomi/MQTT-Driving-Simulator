@@ -11,7 +11,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 const PRESET_CUBE = {
   type: "CUBE",
-  image: "./image/THOUZER2.png",
+  image: "./THOUZER2.png",
   scale: 0.1, // 元画像サイズに合わせた比率
   offset: 500, // 元画像に合わせた位置調整
   size: {
